@@ -1,0 +1,305 @@
+/* ==============================================
+   ROBOT DSL INTERPRETER - STYLESHEET
+   Member 3: The Builder - Modern UI Design
+   ============================================== */
+
+/* ========== ROOT & GLOBAL STYLES ========== */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #f5f7fa;
+}
+
+/* ========== BORDER PANE ========== */
+BorderPane {
+    -fx-background-color: linear-gradient(to bottom, #e3f2fd, #f5f7fa);
+    -fx-padding: 15px;
+    -fx-border-color: #2196f3;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+/* ========== TEXT AREA (Code Editor) ========== */
+#codeArea {
+    -fx-background-color: white;
+    -fx-border-color: #bbdefb;
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px;
+    -fx-font-family: "Consolas", "Monaco", "Courier New", monospace;
+    -fx-font-size: 13px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.2, 2, 2);
+}
+
+#codeArea:focused {
+    -fx-border-color: #2196f3;
+    -fx-border-width: 3px;
+}
+
+#codeArea .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+#codeArea .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+#codeArea .scroll-bar:vertical .thumb {
+    -fx-background-color: #90caf9;
+    -fx-background-radius: 4px;
+}
+
+#codeArea .scroll-bar:vertical .track {
+    -fx-background-color: #e3f2fd;
+    -fx-background-radius: 4px;
+}
+
+/* ========== VBOX (Right Panel) ========== */
+VBox {
+    -fx-spacing: 15px;
+    -fx-padding: 15px;
+    -fx-background-color: white;
+    -fx-border-color: #e3f2fd;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0.2, 0, 2);
+}
+
+/* ========== BUTTONS ========== */
+.button {
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.2, 2, 2);
+    -fx-transition: all 0.2s;
+}
+
+.button:hover {
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.3, 2, 2);
+}
+
+.button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.1, 1, 1);
+}
+
+/* Run Button */
+#runB {
+    -fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C);
+    -fx-border-color: #2E7D32;
+    -fx-border-width: 2px;
+}
+
+#runB:hover {
+    -fx-background-color: linear-gradient(to bottom, #66BB6A, #43A047);
+}
+
+#runB:pressed {
+    -fx-background-color: linear-gradient(to bottom, #388E3C, #2E7D32);
+}
+
+/* Reset Button */
+#resetB {
+    -fx-background-color: linear-gradient(to bottom, #F44336, #D32F2F);
+    -fx-border-color: #C62828;
+    -fx-border-width: 2px;
+}
+
+#resetB:hover {
+    -fx-background-color: linear-gradient(to bottom, #EF5350, #E53935);
+}
+
+#resetB:pressed {
+    -fx-background-color: linear-gradient(to bottom, #D32F2F, #C62828);
+}
+
+/* D-Pad Buttons */
+#upBtn {
+    -fx-background-color: linear-gradient(to bottom, #2196F3, #1976D2);
+    -fx-border-color: #1565C0;
+    -fx-border-width: 2px;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+}
+
+#downBtn {
+    -fx-background-color: linear-gradient(to bottom, #2196F3, #1976D2);
+    -fx-border-color: #1565C0;
+    -fx-border-width: 2px;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+}
+
+#leftBtn {
+    -fx-background-color: linear-gradient(to bottom, #2196F3, #1976D2);
+    -fx-border-color: #1565C0;
+    -fx-border-width: 2px;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+}
+
+#rightBtn {
+    -fx-background-color: linear-gradient(to bottom, #2196F3, #1976D2);
+    -fx-border-color: #1565C0;
+    -fx-border-width: 2px;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+}
+
+#upBtn:hover, #downBtn:hover, #leftBtn:hover, #rightBtn:hover {
+    -fx-background-color: linear-gradient(to bottom, #42A5F5, #1E88E5);
+}
+
+/* ========== GRID PANE (D-Pad) ========== */
+#dPad {
+    -fx-background-color: #e8f5e9;
+    -fx-border-color: #c8e6c9;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-hgap: 5px;
+    -fx-vgap: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.2, 0, 2);
+}
+
+/* Label cho D-Pad */
+#dPad Label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E7D32;
+    -fx-font-size: 12px;
+}
+
+/* ========== CANVAS (Game Area) ========== */
+#gameCanvas {
+    -fx-background-color: white;
+    -fx-border-color: #1976D2;
+    -fx-border-width: 3px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.3), 15, 0.3, 0, 5);
+}
+
+/* Canvas container */
+StackPane {
+    -fx-padding: 10px;
+    -fx-background-color: #e3f2fd;
+    -fx-border-color: #bbdefb;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+}
+
+/* ========== STATUS LABEL ========== */
+#statusLabel {
+    -fx-background-color: linear-gradient(to right, #e3f2fd, #f3e5f5);
+    -fx-border-color: #2196f3;
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 12px 15px;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: #0d47a1;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.2), 5, 0.2, 0, 2);
+}
+
+/* Status success */
+#statusLabel.success {
+    -fx-background-color: linear-gradient(to right, #e8f5e9, #f1f8e9);
+    -fx-text-fill: #1b5e20;
+    -fx-border-color: #4caf50;
+}
+
+/* Status error */
+#statusLabel.error {
+    -fx-background-color: linear-gradient(to right, #ffebee, #fce4ec);
+    -fx-text-fill: #c62828;
+    -fx-border-color: #f44336;
+}
+
+/* Status warning */
+#statusLabel.warning {
+    -fx-background-color: linear-gradient(to right, #fff3e0, #fff8e1);
+    -fx-text-fill: #ef6c00;
+    -fx-border-color: #ff9800;
+}
+
+/* ========== HEADERS & LABELS ========== */
+Label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #1565c0;
+}
+
+/* Section headers */
+.section-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d47a1;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* Quick commands label */
+VBox > Label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E7D32;
+    -fx-font-size: 15px;
+    -fx-padding: 0 0 5px 0;
+    -fx-border-color: #c8e6c9;
+    -fx-border-width: 0 0 2px 0;
+}
+
+/* ========== HOVER EFFECTS ========== */
+/* Add subtle hover effect to entire UI */
+BorderPane:hover {
+    -fx-background-color: linear-gradient(to bottom, #e8f5ff, #f0f9ff);
+}
+
+/* Tooltip styling */
+.tooltip {
+    -fx-background-color: rgba(0, 0, 0, 0.8);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 4px;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes pulse {
+    0% { -fx-scale-x: 1; -fx-scale-y: 1; }
+    50% { -fx-scale-x: 1.05; -fx-scale-y: 1.05; }
+    100% { -fx-scale-x: 1; -fx-scale-y: 1; }
+}
+
+.button.running {
+    -fx-animation: pulse 0.5s infinite;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+/* For smaller windows */
+@media (max-width: 800px) {
+    .root {
+        -fx-font-size: 12px;
+    }
+    
+    .button {
+        -fx-font-size: 12px;
+        -fx-padding: 8px 15px;
+    }
+    
+    #codeArea {
+        -fx-font-size: 11px;
+    }
+}
