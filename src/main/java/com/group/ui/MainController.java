@@ -76,28 +76,30 @@ public class MainController {
     }
     
     /**
-     * Thêm prompt text mẫu vào TextArea
+     * Add sample code template to editor
      */
-    private void addSamplePrompt() {
+     private void addSamplePrompt() {
         String sampleCode = """
             BEGIN
-                SET_PEN "red"
-                MOVE FORWARD 3
+            SET_PEN "red"
+            MOVE FORWARD 3
+            TURN RIGHT
+            LOOP 4 {
+                MOVE FORWARD 2
                 TURN RIGHT
-                LOOP 4 {
-                    MOVE FORWARD 2
-                    TURN RIGHT
-                }
+            }
             END""";
         
-        codeArea.setPromptText(sampleCode);
+        codeArea.setText(sampleCode);
+        // Move cursor to the end for convenient continued typing
+        codeArea.positionCaret(codeArea.getLength());
     }
-    
-    // Logic D-Pad 
+    /**
+     * Setup D-Pad button handlers
+     */
     private void setupDPad() {
         System.out.println("Setting up D-Pad buttons...");
         
-        // Sử dụng fx:id trực tiếp - cách này an toàn hơn
         upBtn.setOnAction(e -> {
             appendCommand("MOVE FORWARD 1");
             updateStatus("Added: MOVE FORWARD 1");
@@ -126,40 +128,34 @@ public class MainController {
     }
     
     /**
-     * Helper method để append command vào codeArea
+     * Append command to code editor
      */
     private void appendCommand(String command) {
         String currentText = codeArea.getText();
         
-        // Thêm newline nếu cần
         if (!currentText.isEmpty() && !currentText.endsWith("\n")) {
             codeArea.appendText("\n");
         }
         
-        // Append command
         codeArea.appendText(command);
-        
-        // Auto-scroll đến cuối
         codeArea.positionCaret(codeArea.getLength());
-        
-        // Thêm newline sau command để chuẩn bị cho command tiếp theo
         codeArea.appendText("\n");
     }
     
-     //Controller xử lý RUN button
+    /**
+     * Setup RUN button handler
+     */
     private void setupRunButton() {
         runB.setOnAction(e -> {
             System.out.println("Run button clicked");
             
             try {
-                // 1. Lấy code từ codeArea
                 String sourceCode = codeArea.getText().trim();
                 if (sourceCode.isEmpty()) {
                     updateStatus("Error: Please enter robot commands");
                     return;
                 }
                 
-                // 2. Validate basic syntax
                 if (!isValidCode(sourceCode)) {
                     updateStatus("Error: Code must start with BEGIN and end with END");
                     return;
@@ -167,18 +163,12 @@ public class MainController {
                 
                 updateStatus("Parsing and executing code...");
                 
-                // 3. Gửi sang backend
                 List<RobotState> history = executeBackend(sourceCode);
-                
-                // 4. Hiển thị số bước
                 updateStatus("Found " + history.size() + " robot states");
-                
-                // 5. Truyền cho renderer (Member 4)
                 renderer.animateRobot(history);
                 
-                // 6. Hiển thị kết quả cuối
                 RobotState lastState = history.get(history.size() - 1);
-                updateStatus("✓ Execution complete. " + lastState.toString());
+                updateStatus("[SUCCESS] Execution complete. " + lastState.toString());
                 
             } catch (Exception ex) {
                 handleError(ex);
@@ -187,64 +177,86 @@ public class MainController {
     }
     
     /**
-     * Kiểm tra code cơ bản
+     * Validate basic code structure (BEGIN and END keywords)
      */
     private boolean isValidCode(String code) {
         return code.startsWith("BEGIN") && code.contains("END");
     }
     
     /**
-     * Giao tiếp với Backend
+     * Execute code through ANTLR parser and interpreter
      */
     private List<RobotState> executeBackend(String sourceCode) throws Exception {
         System.out.println("Executing backend with code length: " + sourceCode.length());
         
         try {
-            // 1. Lexer
+            // 1. Lexer setup
             RobotLexer lexer = new RobotLexer(CharStreams.fromString(sourceCode));
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             
-            // 2. Parser
+            // 2. Parser setup
             RobotParser parser = new RobotParser(tokens);
             
+            // Remove default console error listener to avoid duplicate messages
+            parser.removeErrorListeners(); 
+            
+            // Add a custom error listener to throw an exception on syntax errors
+            final StringBuilder errorMessages = new StringBuilder(); // Collect all error messages
+            parser.addErrorListener(new org.antlr.v4.runtime.BaseErrorListener() {
+                @Override
+                public void syntaxError(org.antlr.v4.runtime.Recognizer<?, ?> recognizer, 
+                                        Object offendingSymbol, int line, int charPositionInLine, 
+                                        String msg, org.antlr.v4.runtime.RecognitionException e) {
+                    // Append error details to be shown in UI
+                    errorMessages.append(String.format("Syntax Error at line %d:%d - %s%n", line, charPositionInLine, msg));
+                }
+            });
+
             // 3. Parse tree
             ParseTree tree = parser.prog();
-            System.out.println("Parse tree created successfully");
+            System.out.println("Parse tree created successfully.");
             
-            // 4. Interpreter
+            // Check if any syntax errors were collected
+            if (errorMessages.length() > 0) {
+                throw new RuntimeException(errorMessages.toString()); // Throw collected errors
+            }
+
+            // 4. Interpreter execution
             RobotInterpreter interpreter = new RobotInterpreter();
             interpreter.visit(tree);
             
-            // 5. Get history
+            // 5. Get robot's history
             List<RobotState> history = interpreter.getHistory();
-            System.out.println("Generated " + history.size() + " robot states");
+            System.out.println("Generated " + history.size() + " robot states.");
             
             return history;
             
         } catch (Exception e) {
-            System.err.println("Backend error: " + e.getMessage());
-            throw new Exception("Failed to execute robot commands: " + e.getMessage());
+            // Catch any exception from parsing or interpreting
+            System.err.println("Backend execution error: " + e.getMessage());
+            // Re-throw as a generic exception to be handled by the UI
+            throw new Exception("Execution failed: " + e.getMessage(), e);
         }
     }
     
     /**
-     * Xử lý lỗi chi tiết
+     * Handle and display execution errors
      */
     private void handleError(Exception ex) {
         String errorMessage;
         
         if (ex.getMessage().contains("BEGIN")) {
-            errorMessage = "❌ Missing BEGIN statement";
+            errorMessage = "[ERROR] Missing BEGIN statement";
         } else if (ex.getMessage().contains("END")) {
-            errorMessage = "❌ Missing END statement";
+            errorMessage = "[ERROR] Missing END statement";
         } else if (ex.getMessage().contains("FORWARD") || ex.getMessage().contains("BACK")) {
-            errorMessage = "❌ MOVE command requires direction (FORWARD/BACK) and distance";
+            errorMessage = "[ERROR] MOVE command requires direction (FORWARD/BACK) and distance";
         } else if (ex.getMessage().contains("SET_PEN")) {
-            errorMessage = "❌ SET_PEN requires a color in quotes (e.g., \"red\")";
+            errorMessage = "[ERROR] SET_PEN requires a color in quotes (e.g., \"red\")";
         } else if (ex.getMessage().contains("LOOP")) {
-            errorMessage = "❌ LOOP requires count and block { }";
+            errorMessage = "[ERROR] LOOP requires count and block { }";
         } else {
-            errorMessage = "❌ Error: " + ex.getMessage();
+            errorMessage = "[ERROR] " + ex.getMessage();
         }
         
         updateStatus(errorMessage);
@@ -252,29 +264,22 @@ public class MainController {
     }
     
     /**
-     * Thiết lập RESET button
+     * Setup RESET button handler
      */
     private void setupResetButton() {
         resetB.setOnAction(e -> {
             System.out.println("Reset button clicked");
             
-            // 1. Clear canvas
             renderer.clearCanvas();
             renderer.drawGrid();
-            
-            // 2. Clear code area
             codeArea.clear();
-            
-            // 3. Reset status
-            updateStatus("✓ Reset complete. Ready for new commands.");
-            
-            // 4. Focus lại vào code area
+            updateStatus("[SUCCESS] Reset complete. Ready for new commands.");
             codeArea.requestFocus();
         });
     }
     
     /**
-     * Cập nhật statusLabel an toàn
+     * Update status label safely on UI thread
      */
     private void updateStatus(String message) {
         Platform.runLater(() -> {
@@ -283,7 +288,7 @@ public class MainController {
     }
     
     /**
-     * Getter cho canvas (cho Member 4)
+     * Get reference to game canvas
      */
     public Canvas getGameCanvas() {
         return gameCanvas;

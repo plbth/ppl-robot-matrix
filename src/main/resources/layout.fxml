@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.geometry.Point3D?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
@@ -48,11 +49,15 @@
    <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Canvas fx:id="gameCanvas" height="500.0" width="500.0" />
+            <Canvas fx:id="gameCanvas" height="530.0" width="530.0" />
          </children>
       </StackPane>
    </center>
    <bottom>
-      <Label fx:id="statusLabel" text="Label" BorderPane.alignment="CENTER" />
+      <Label fx:id="statusLabel" text="Ready" BorderPane.alignment="CENTER_LEFT">
+         <BorderPane.margin>
+            <Insets top="10.0" bottom="5.0" />
+         </BorderPane.margin>
+      </Label>
    </bottom>
 </BorderPane>

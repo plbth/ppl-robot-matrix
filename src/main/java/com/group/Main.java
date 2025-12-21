@@ -13,20 +13,20 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // Load FXML file từ resources
+            // Load FXML file from resources
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout.fxml"));
             Parent root = loader.load();
             
-            // Get controller (sẽ tự động gọi initialize())
+            // Get controller (auto call initialize())
             Object controller = loader.getController();
             System.out.println("Controller loaded: " + controller.getClass().getName());
             
-            // Tạo Scene
-            Scene scene = new Scene(root, 927, 630); // Kích thước từ FXML
+            // Create Scene
+            Scene scene = new Scene(root, 927, 630); // From FXML
             
             scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
             
-            // Thiết lập Stage
+            // Set up Stage
             primaryStage.setTitle("Robot DSL Interpreter");
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);

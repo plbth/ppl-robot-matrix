@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
 
-public class BackendTest {
+public class Test {
     public static void main(String[] args) {
         // Test Code: Includes Boundary Check (Trying to move 100 steps)
         String sourceCode = """

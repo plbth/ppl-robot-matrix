@@ -24,8 +24,15 @@ public record RobotState(int x, int y, int headingIndex, String color) {
      */
     public RobotState move(String direction, int steps) {
         // Determine step direction (Forward = +steps, Back = -steps)
-        boolean isForward = direction.equalsIgnoreCase("FORWARD");
-        int stepSize = isForward ? steps : -steps;
+        int stepSize;
+        if (direction.equalsIgnoreCase("FORWARD")) {
+            stepSize = steps;
+        } else if (direction.equalsIgnoreCase("BACK")) {
+            stepSize = -steps;
+        } else {
+            // If direction is empty or invalid due to parser error -> Report error immediately
+            throw new IllegalArgumentException("Invalid direction: " + direction);
+        }
 
         int newX = this.x;
         int newY = this.y;

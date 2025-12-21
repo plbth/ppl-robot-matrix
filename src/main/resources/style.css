@@ -203,40 +203,37 @@ StackPane {
 
 /* ========== STATUS LABEL ========== */
 #statusLabel {
-    -fx-background-color: linear-gradient(to right, #e3f2fd, #f3e5f5);
-    -fx-border-color: #2196f3;
-    -fx-border-width: 2px;
-    -fx-border-radius: 6px;
-    -fx-background-radius: 6px;
-    -fx-padding: 12px 15px;
-    -fx-font-weight: bold;
+    -fx-background-color: #f0f4f8; /* Flat light gray-blue */
+    -fx-border-color: #d1d9e6;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 12px;
+    -fx-font-family: "Segoe UI", sans-serif;
     -fx-font-size: 13px;
-    -fx-text-fill: #0d47a1;
-    -fx-alignment: center-left;
-    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.2), 5, 0.2, 0, 2);
+    -fx-text-fill: #333333;
 }
 
 /* Status success */
 #statusLabel.success {
-    -fx-background-color: linear-gradient(to right, #e8f5e9, #f1f8e9);
-    -fx-text-fill: #1b5e20;
-    -fx-border-color: #4caf50;
+    -fx-background-color: #e8f5e9; /* Flat light green */
+    -fx-text-fill: #2e7d32;
+    -fx-border-color: #a5d6a7;
 }
 
 /* Status error */
 #statusLabel.error {
-    -fx-background-color: linear-gradient(to right, #ffebee, #fce4ec);
+    -fx-background-color: #ffebee; /* Flat light red */
     -fx-text-fill: #c62828;
-    -fx-border-color: #f44336;
+    -fx-border-color: #ef9a9a;
 }
 
 /* Status warning */
 #statusLabel.warning {
-    -fx-background-color: linear-gradient(to right, #fff3e0, #fff8e1);
-    -fx-text-fill: #ef6c00;
-    -fx-border-color: #ff9800;
+    -fx-background-color: #fff8e1; /* Flat light orange */
+    -fx-text-fill: #f57f17;
+    -fx-border-color: #ffe082;
 }
-
 /* ========== HEADERS & LABELS ========== */
 Label {
     -fx-font-size: 14px;
