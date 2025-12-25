@@ -38,8 +38,6 @@ public class MainController {
     
     @FXML
     public void initialize() {
-        String css = getClass().getResource("/style.css").toExternalForm();       
-
         System.out.println("MainController initialized!");
         
         checkComponents();  
@@ -52,7 +50,7 @@ public class MainController {
         setupResetButton();
         setupDPad();
         
-        updateStatus("Ready - Enter robot commands");
+        updateStatus("Ready - Enter robot commands", "normal");
         
         addSamplePrompt();
     }
@@ -102,25 +100,21 @@ public class MainController {
         
         upBtn.setOnAction(e -> {
             appendCommand("MOVE FORWARD 1");
-            updateStatus("Added: MOVE FORWARD 1");
             System.out.println("Up button clicked - added MOVE FORWARD 1");
         });
         
         downBtn.setOnAction(e -> {
             appendCommand("MOVE BACK 1");
-            updateStatus("Added: MOVE BACK 1");
             System.out.println("Down button clicked - added MOVE BACK 1");
         });
         
         leftBtn.setOnAction(e -> {
             appendCommand("TURN LEFT");
-            updateStatus("Added: TURN LEFT");
             System.out.println("Left button clicked - added TURN LEFT");
         });
         
         rightBtn.setOnAction(e -> {
             appendCommand("TURN RIGHT");
-            updateStatus("Added: TURN RIGHT");
             System.out.println("Right button clicked - added TURN RIGHT");
         });
         
@@ -147,28 +141,27 @@ public class MainController {
      */
     private void setupRunButton() {
         runB.setOnAction(e -> {
-            System.out.println("Run button clicked");
-            
             try {
                 String sourceCode = codeArea.getText().trim();
                 if (sourceCode.isEmpty()) {
-                    updateStatus("Error: Please enter robot commands");
+                    updateStatus("Error: Please enter robot commands", "error");
                     return;
                 }
                 
                 if (!isValidCode(sourceCode)) {
-                    updateStatus("Error: Code must start with BEGIN and end with END");
+                    updateStatus("Error: Code must start with BEGIN and end with END", "error");
                     return;
                 }
                 
-                updateStatus("Parsing and executing code...");
+                updateStatus("Parsing and executing code...", "normal");
                 
                 List<RobotState> history = executeBackend(sourceCode);
-                updateStatus("Found " + history.size() + " robot states");
+                updateStatus("Found " + history.size() + " robot states", "success");
                 renderer.animateRobot(history);
                 
                 RobotState lastState = history.get(history.size() - 1);
-                updateStatus("[SUCCESS] Execution complete. " + lastState.toString());
+                // SUCCESS: Gọi updateStatus với style "success" (Màu xanh)
+                updateStatus("[SUCCESS] Execution complete. " + lastState.toString(), "success");
                 
             } catch (Exception ex) {
                 handleError(ex);
@@ -259,7 +252,8 @@ public class MainController {
             errorMessage = "[ERROR] " + ex.getMessage();
         }
         
-        updateStatus(errorMessage);
+        // ERROR: Gọi updateStatus với style "error" (Màu đỏ)
+        updateStatus(errorMessage, "error");
         System.err.println("Detailed error: " + ex.getClass().getName() + " - " + ex.getMessage());
     }
     
@@ -268,28 +262,33 @@ public class MainController {
      */
     private void setupResetButton() {
         resetB.setOnAction(e -> {
-            System.out.println("Reset button clicked");
-            
             renderer.clearCanvas();
             renderer.drawGrid();
             codeArea.clear();
-            updateStatus("[SUCCESS] Reset complete. Ready for new commands.");
+            updateStatus("[SUCCESS] Reset complete. Ready for new commands.", "success");
             codeArea.requestFocus();
         });
     }
     
     /**
-     * Update status label safely on UI thread
+     * Update status message and change text color
+     * @param message The status message content
+     * @param type Message type: "error", "success", "warning", or "normal"
      */
-    private void updateStatus(String message) {
+    private void updateStatus(String message, String type) {
         Platform.runLater(() -> {
             statusLabel.setText(message);
+            
+            // Remove all old CSS classes (to avoid conflicts, e.g., both red and green)
+            statusLabel.getStyleClass().removeAll("error", "success", "warning");
+            
+            // Add new CSS class corresponding to style.css
+            if (type != null && !type.equals("normal")) {
+                statusLabel.getStyleClass().add(type);
+            }
         });
     }
     
-    /**
-     * Get reference to game canvas
-     */
     public Canvas getGameCanvas() {
         return gameCanvas;
     }
